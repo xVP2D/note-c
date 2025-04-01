@@ -1,0 +1,111 @@
+**Cours du 10-03-2025 : La Pile et l’Assemblage en C**
+
+### 1. Introduction à la Pile
+
+La pile (stack) est une structure mémoire qui grandit vers les adresses basses. Elle est essentielle dans l'exécution des programmes, notamment pour la gestion des variables locales et des appels de fonctions.
+
+#### Caractéristiques :
+- Chaque octet dans la RAM a une adresse unique.
+- Les registres n’ont pas d’adresse.
+- `push` ajoute une valeur sur la pile, `pop` la retire.
+- Exemple :
+  ```assembly
+  push 10
+  push 12
+  pop rax  ; rax contient maintenant 12
+  ```
+
+### 2. Instructions de Base en Assembleur
+
+- `add rax, rbx` : Additionne les valeurs de `rax` et `rbx`.
+- `call` : Sauvegarde l’adresse de retour et exécute une fonction.
+- `ret` : Restaure l’adresse de retour et termine la fonction.
+- `mov` : Déplace des données entre registres ou entre mémoire et registre.
+
+#### Exemple de programme en assembleur :
+```assembly
+global main
+
+add:
+    push rbp
+    mov rbp, rsp
+    add rdi, rsi
+    mov rax, rdi
+    pop rbp
+    ret
+
+main:
+    push rbp
+    mov rbp, rsp
+    mov rdi, 11
+    mov rsi, 12
+    call add
+    mov rax, 0
+    pop rbp
+    ret
+```
+
+### 3. Compilation et Debugging
+
+#### Compilation
+```sh
+nasm -g -f elf64 add.s -o add.o
+```
+
+#### Linking
+```sh
+gcc -g3 add.o -o add
+```
+
+#### Débogage avec GDB
+- `b main` : Place un point d’arrêt à `main`.
+- `r` : Exécute le programme.
+- `x/20i $rsp` : Affiche 20 instructions à partir de `rsp`.
+
+### 4. Endianness et Registres
+
+- **Big Endian** : Les octets les plus significatifs sont stockés en premier.
+- **Little Endian** : Les octets les moins significatifs sont stockés en premier.
+- Registres importants :
+  - `RBP` : Base Pointer (pointeur de base de la pile)
+  - `RSP` : Stack Pointer (pointeur de pile)
+  - `RIP` : Instruction Pointer (pointeur d’instruction)
+
+### 5. Exercice : Addition avec 3 Valeurs
+
+Traduction d’un programme en C vers l’assembleur :
+
+#### Code C :
+```c
+int add(int a, int b) {
+    return a + b;
+}
+
+int main(void) {
+    return add(4, 8);
+}
+```
+
+#### Code Assembleur :
+```assembly
+global main
+
+add:
+    push rbp
+    mov rbp, rsp
+    add rdi, rsi
+    mov rax, rdi
+    pop rbp
+    ret
+
+main:
+    push rbp
+    mov rbp, rsp
+    mov rdi, 5
+    mov rsi, 9
+    call add
+    mov rsi, 10
+    call add
+    pop rbp
+    ret
+```
