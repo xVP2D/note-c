@@ -1,0 +1,75 @@
+**Cours 5 : Les outils autour du C**
+
+**Date : 18-03-2025**
+
+### 1. Introduction
+Ce cours explore les outils liés au langage C, notamment l’utilisation des appels système `read` et `write`, la gestion des fichiers et la mémoire.
+
+### 2. Lecture et écriture de fichiers en C
+
+Lorsqu’on effectue un `read` et un `write`, des octets nuls peuvent être rencontrés. Ces opérations impliquent une interaction entre le mode utilisateur (userland) et le mode noyau.
+
+#### Exemple de code en C :
+```c
+#include <fcntl.h> // Pour open
+#include <unistd.h> // Pour read et write
+#include <stdio.h>
+
+int main(void) {
+    char data[1024];
+    int fd = open("hello.md", O_RDONLY);
+    if (fd == -1) {
+        perror("hello.md");
+        return 1;
+    }
+    ssize_t nb_bytes = read(fd, data, 1024);
+    close(fd);
+    write(1, data, nb_bytes);
+    return 0;
+}
+```
+
+### 3. Outils d’analyse de fichiers ELF
+
+- `readelf -h` : Affiche l’en-tête d’un fichier ELF.
+- `readelf -a` : Montre l’interpréteur du programme.
+- `objdump -d -Mintel ./hello` : Désassemble le code.
+- `nm hello` : Liste les symboles du fichier binaire.
+- `make` : Utilisé pour compiler et mettre à jour un projet en C.
+
+### 4. Gestion de la mémoire
+
+#### Stack vs Heap
+- La **stack** alloue de l’espace temporaire et se libère après le `return`.
+- La **heap** permet une allocation dynamique à l’aide de `malloc()` et `free()`.
+
+#### Exemple d’allocation dynamique :
+```c
+#include <stdlib.h>
+#include <stdio.h>
+
+char *read_file(char *filename) {
+    void *base_brk = sbrk(1000); // Augmente brk de 1000 octets
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1) {
+        perror(filename);
+        return NULL;
+    }
+    ssize_t bytes_read = read(fd, base_brk, 999);
+    close(fd);
+    ((char *)base_brk)[bytes_read] = '\0';
+    return (char *)base_brk;
+}
+```
+
+### 5. Compilation et Makefile
+
+Exemple de **Makefile** :
+```makefile
+CFLAGS = -g -std=c99 -O0 -Wall -Werror
+hello: hello.c
+    cc $(CFLAGS) hello.c -o hello
+.PHONY: clean
+clean:
+    rm -f hello
+```
