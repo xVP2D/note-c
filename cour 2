@@ -1,0 +1,72 @@
+## **Cours 2 - Langage C**  
+
+### **Mémoire et Structure en RAM**  
+- La mémoire RAM stocke uniquement des bits.  
+- Avant la standardisation des octets en 8 bits, les unités de stockage étaient appelées "mots".  
+- Les principales structures en RAM : **pile (stack)**, **tas (heap)** et **texte (code exécuté)**.  
+- Adressage en **hexadécimal** et manipulation des types **signed, unsigned, floats, char, instructions**.  
+- La **MMU (Memory Management Unit)** gère les adresses mémoire et leur conversion.  
+
+### **Langages de programmation**  
+- **Assembleur (ASM Intel)** : programmation de bas niveau, proche du matériel.  
+- **Langage C** : langage structuré et portable, permettant une manipulation fine de la mémoire.  
+- **Python & Django** : outils plus haut niveau facilitant le développement web et logiciel.  
+
+### **Gestion des Arguments du Programme**  
+- Lors de l’exécution d’un programme en C, les arguments sont stockés sous forme d’une liste de chaînes de caractères.  
+- Exemple avec `./fib 10` :  
+  ```c
+  int main(int argc, char **argv) {
+      // argc = nombre d'arguments
+      // argv = tableau de chaînes de caractères
+  }
+  ```
+- `sys.argv` en Python équivaut à `argv` en C.  
+
+### **Syscalls en C**  
+- **write(1, "\n", 1)** : écrit une nouvelle ligne dans la sortie standard.  
+- **exit(0)** : termine l’exécution du programme.  
+
+### **Conversion de Chaînes en Entiers**  
+- En C, pour convertir un caractère en chiffre :  
+  ```c
+  char c = '8';
+  int n = c - '0'; // n = 8
+  ```
+- Pour convertir une chaîne entière :  
+  ```c
+  int my_atoi(char *number) {
+      int result = 0;
+      while (*number) {
+          result = result * 10 + (*number - '0');
+          number++;
+      }
+      return result;
+  }
+  ```  
+
+### **Calcul de la Suite de Fibonacci**  
+- Implémentation récursive :  
+  ```c
+  int fib(int n) {
+      if (n < 2) return 1;
+      return fib(n-1) + fib(n-2);
+  }
+  ```  
+- Affichage du résultat en manipulant les caractères ASCII :  
+  ```c
+  void print_int(int value) {
+      if (value >= 10) print_int(value / 10);
+      char digit = (value % 10) + '0';
+      write(1, &digit, 1);
+  }
+  ```  
+
+### **Compilation et Outils**  
+- **GCC** pour compiler un fichier C :  
+  ```bash
+  gcc -o prog fichier.c
+  ```  
+- **Strace** : affiche les appels système effectués par un programme.  
+- **Objdump** : permet de voir le code assembleur généré par le compilateur.  
+- **Hexdump** : affiche le contenu d’un fichier en hexadécimal.  
