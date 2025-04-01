@@ -1,0 +1,67 @@
+# **Introduction à l'Architecture Matérielle et au Langage C**  
+
+## **1. Structure d'un Ordinateur**  
+Un ordinateur est composé de plusieurs éléments essentiels :  
+- **CPU** (Unité Centrale de Traitement)  
+  - Registres  
+  - ALU (Unité Arithmétique et Logique)  
+  - Instructions  
+- **Mémoire RAM** (Stockage temporaire des données et instructions)  
+  - **Stack** : Gère l’exécution des fonctions  
+  - **Heap** : Stocke des données dynamiques  
+
+## **2. Représentation des Données**  
+- **Octets et ASCII** :  
+  - 1 octet = 8 bits  
+  - Exemple de caractères : ‘A’ (0x41 en hexa), ‘a’ (0x61 en hexa)  
+  - ASCII vs UTF-8 : UTF-8 est compatible ASCII pour les 128 premiers caractères  
+
+- **Système de Numération** :  
+  - Base 2 (binaire) → Base 16 (hexadécimal) simplifie les conversions  
+  - Nombres stockés en RAM avec des codages spécifiques (ex: UTF-8, UTF-32)  
+
+## **3. Fonctionnement du Terminal et du Kernel**  
+- Affichage, entrées clavier, impressions, gestion des processus  
+- **Commandes utiles** :  
+  - `man ascii` : afficher la table ASCII  
+  - `cat /proc/cpuinfo` : voir les extensions CPU  
+
+## **4. Programmation en Langage C**  
+- **Manipulation de la RAM** :  
+  - Le C manipule uniquement des nombres stockés en mémoire  
+  - Gestion de la Stack et de la Heap  
+
+- **Instructions CPU courantes** :  
+  - `ADD` : Addition  
+  - `POP` : Récupérer une valeur de la stack  
+  - `MOV` : Déplacer une valeur  
+  - `SYSCALL` : Appeler une fonction système  
+
+## **5. Premier Programme : Suite de Fibonacci**  
+- Démonstration en Python puis en C  
+- **Principe du programme** :  
+  ```c
+  int fib(int n) {
+      if (n < 2) return 1;
+      return fib(n-1) + fib(n-2);
+  }
+  ```
+- Implémentation bas niveau avec registres et appels système  
+
+## **6. Syscalls et Gestion de la Mémoire**  
+- **Instructions spécifiques** :  
+  - `sub rsp, 3` : Réduction du pointeur de la stack  
+  - `leave` : Restaurer le pointeur d’exécution  
+  - `ret` : Retour d’une fonction  
+
+- **Exécution du programme** :  
+  - Appel de `fib(n)`  
+  - Conversion des arguments  
+  - Affichage du résultat  
+
+## **7. Conclusion**  
+Ce premier cours introduit les bases de l'architecture des ordinateurs et la programmation en C. Il met l’accent sur la gestion de la mémoire, la représentation des données et les appels système pour une meilleure compréhension du fonctionnement bas niveau.
+
+---
+
+Si vous voulez une reformulation plus détaillée ou avec un focus particulier, dites-moi ! 😊
